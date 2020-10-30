@@ -31,7 +31,9 @@ class App extends Component {
     //     <AnimatedFlexBoxExample />
     //   </View>
     // );
-
+    function AlertView(props) {
+      return React.createElement('AlertView', props, props.children);
+    }
     return (
       <View {...styles.container}>
         <View {...styles.content}>
@@ -42,6 +44,7 @@ class App extends Component {
           <Meter {...styles.meter} />
           <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
         </View>
+        <AlertView/>
       </View>
     );
   }

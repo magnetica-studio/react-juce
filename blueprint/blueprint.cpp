@@ -106,6 +106,7 @@
 #include "core/blueprint_ReactApplicationRoot.cpp"
 #include "core/blueprint_ShadowView.cpp"
 #include "core/blueprint_TextShadowView.cpp"
+#include "core/blueprint_AlertView.cpp"
 #include "core/blueprint_View.cpp"
 #include "core/blueprint_ViewManager.cpp"
 

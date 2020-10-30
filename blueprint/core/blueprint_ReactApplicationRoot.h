@@ -20,6 +20,7 @@
 #include "blueprint_ShadowView.h"
 #include "blueprint_TextShadowView.h"
 #include "blueprint_TextView.h"
+#include "blueprint_AlertView.h"
 #include "blueprint_View.h"
 #include "blueprint_ViewManager.h"
 
@@ -446,6 +447,12 @@ namespace blueprint
 
             viewManager->registerViewType("View", []() -> ViewPair {
                 auto view = std::make_unique<View>();
+                auto shadowView = std::make_unique<ShadowView>(view.get());
+
+                return {std::move(view), std::move(shadowView)};
+            });
+            viewManager->registerViewType("AlertView", []() -> ViewPair {
+                auto view = std::make_unique<AlertView>();
                 auto shadowView = std::make_unique<ShadowView>(view.get());
 
                 return {std::move(view), std::move(shadowView)};

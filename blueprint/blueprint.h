@@ -89,5 +89,7 @@
 #include "core/blueprint_TextShadowView.h"
 #include "core/blueprint_TextView.h"
 #include "core/blueprint_ThrottleMap.h"
+#include "core/blueprint_AlertView.h"
 #include "core/blueprint_View.h"
 #include "core/blueprint_ViewManager.h"
+
