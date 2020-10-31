@@ -26,29 +26,38 @@ namespace blueprint {
             comboBox.setLookAndFeel(&lookAndFeel);
         }
 
-//        void setProperty(const juce::Identifier &name, const juce::var &value) override {
-//        }
+        void setProperty(const juce::Identifier &name, const juce::var &value) override {
+            View::setProperty(name, value);
 
-        void paint(juce::Graphics &g) override {
-            View::paint(g);
-            if (props.contains("options")) {
-                // addOption to comboBox
-                auto options = props["options"].getArray();
+            if (name == juce::StringRef("options"))
+            {
+                // add options to comboBox menu
+                auto options = value.getArray();
                 for(auto& option : *options) {
-                    auto value = option.getDynamicObject()->getProperty("value");
-                    auto label = option.getDynamicObject()->getProperty("label");
-                    auto id = static_cast<int>(value);
-                    addOption(id, label.toString());
+                    auto valueProp = option.getDynamicObject()->getProperty("value");
+                    auto labelProp = option.getDynamicObject()->getProperty("label");
+                    addOption(static_cast<int>(valueProp), labelProp.toString());
                 }
+                if (props.contains("initialValue"))
+                    comboBox.setSelectedId(static_cast<int>(props["initialValue"]));
             }
-
-            if (props.contains("onValueChange") && props["onValueChange"].isMethod()) {
+            if (name == juce::StringRef("onValueChange") && value.isMethod())
+            {
                 comboBox.onChange = [&] {
                     std::vector<juce::var> jsArgs{{comboBox.getSelectedId()}};
                     juce::var::NativeFunctionArgs nfArgs(juce::var(), jsArgs.data(), static_cast<int>(jsArgs.size()));
                     std::invoke(props["onValueChange"].getNativeFunction(), nfArgs);
                 };
             }
+            if (name == juce::StringRef("initialValue"))
+            {
+                comboBox.setSelectedId(static_cast<int>(value));
+            }
+        }
+
+        void paint(juce::Graphics &g) override {
+            View::paint(g);
+
             if (props.contains("background-color"))
                 comboBox.setColour(
                         juce::ComboBox::ColourIds::backgroundColourId,
