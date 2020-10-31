@@ -31,6 +31,42 @@ namespace blueprint
             comboBox.addItem("Italic", 3);
             comboBox.setSelectedId(1);
         }
+
+        void setProperty(const juce::Identifier &name, const juce::var &value) override
+        {
+            if (name == juce::StringRef("background-color"))
+                comboBox.setColour(
+                        juce::ComboBox::ColourIds::backgroundColourId,
+                        juce::Colour::fromString(value.toString())
+                );
+            if (name == juce::StringRef("color"))
+                comboBox.setColour(
+                        juce::ComboBox::ColourIds::textColourId,
+                        juce::Colour::fromString(value.toString())
+                );
+            if (name == juce::StringRef("arrow-color"))
+                comboBox.setColour(
+                        juce::ComboBox::ColourIds::arrowColourId,
+                        juce::Colour::fromString(value.toString())
+                );
+            if (name == juce::StringRef("button-color"))
+                comboBox.setColour(
+                        juce::ComboBox::ColourIds::buttonColourId,
+                        juce::Colour::fromString(value.toString())
+                );
+            if (name == juce::StringRef("focused-outline-color"))
+                comboBox.setColour(
+                        juce::ComboBox::ColourIds::focusedOutlineColourId,
+                        juce::Colour::fromString(value.toString())
+                );
+            if (name == juce::StringRef("outline-color"))
+                comboBox.setColour(
+                        juce::ComboBox::ColourIds::outlineColourId,
+                        juce::Colour::fromString(value.toString())
+                );
+            View::setProperty(name, value);
+        }
+
         void resized() override
         {
             comboBox.setBounds(0, 0, getWidth() , getHeight());

@@ -44,7 +44,16 @@ class App extends Component {
           </Slider>
           <Meter {...styles.meter} />
           <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
-          <ComboBox width="100%" height={20} background-color={`770055ff`}/>
+          <ComboBox
+              width="100%"
+              height={20}
+              arrow-color="00ffffff"
+              background-color={`00000000`}
+              color={`ffffffff`}
+              outline-color="00000000"
+              focused-outline-color="ffffffff"
+              button-color="ffff0000"
+          />
         </View>
       </View>
     );
