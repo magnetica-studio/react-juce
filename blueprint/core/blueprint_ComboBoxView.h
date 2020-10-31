@@ -30,55 +30,54 @@ namespace blueprint {
             comboBox.setLookAndFeel(&lookAndFeel);
         }
 
-        void setProperty(const juce::Identifier &name, const juce::var &value) override {
-            // TODO: Paintメソッドに移した方が良さそう。Hot-reload時にクラッシュする
-            if (name == juce::StringRef("background-color"))
+        void paint(juce::Graphics &g) override
+        {
+            View::paint(g);
+
+            if (props.contains("background-color"))
                 comboBox.setColour(
                         juce::ComboBox::ColourIds::backgroundColourId,
-                        juce::Colour::fromString(value.toString())
+                        juce::Colour::fromString(props["background-color"].toString())
                 );
-            if (name == juce::StringRef("color"))
+            if (props.contains("color"))
                 comboBox.setColour(
                         juce::ComboBox::ColourIds::textColourId,
-                        juce::Colour::fromString(value.toString())
+                        juce::Colour::fromString(props["color"].toString())
                 );
-            if (name == juce::StringRef("arrow-color"))
+            if (props.contains("arrow-color"))
                 comboBox.setColour(
                         juce::ComboBox::ColourIds::arrowColourId,
-                        juce::Colour::fromString(value.toString())
+                        juce::Colour::fromString(props["arrow-color"].toString())
                 );
-            if (name == juce::StringRef("button-color"))
+            if (props.contains("button-color"))
                 comboBox.setColour(
                         juce::ComboBox::ColourIds::buttonColourId,
-                        juce::Colour::fromString(value.toString())
+                        juce::Colour::fromString(props["button-color"].toString())
                 );
-            if (name == juce::StringRef("focused-outline-color"))
+            if (props.contains("focused-outline-color"))
                 comboBox.setColour(
                         juce::ComboBox::ColourIds::focusedOutlineColourId,
-                        juce::Colour::fromString(value.toString())
+                        juce::Colour::fromString(props["focused-outline-color"].toString())
                 );
-            if (name == juce::StringRef("outline-color"))
+            if (props.contains("outline-color"))
                 comboBox.setColour(
                         juce::ComboBox::ColourIds::outlineColourId,
-                        juce::Colour::fromString(value.toString())
+                        juce::Colour::fromString(props["outline-color"].toString())
                 );
-            if (name == juce::StringRef("popup-color")) {
+            if (props.contains("popup-color"))
                 lookAndFeel.setColour(
                         juce::PopupMenu::ColourIds::backgroundColourId,
-                        juce::Colour::fromString(value.toString()));
-            }
-            if (name == juce::StringRef("highlight-color")) {
+                        juce::Colour::fromString(props["popup-color"].toString()));
+
+            if (props.contains("highlight-color"))
                 lookAndFeel.setColour(
                         juce::PopupMenu::ColourIds::highlightedBackgroundColourId,
-                        juce::Colour::fromString(value.toString()));
-            }
-            if (name == juce::StringRef("highlight-background-color")) {
+                        juce::Colour::fromString(props["highlight-color"].toString()));
+
+            if (props.contains("highlight-background-color"))
                 lookAndFeel.setColour(
                         juce::PopupMenu::ColourIds::highlightedTextColourId,
-                        juce::Colour::fromString(value.toString()));
-            }
-
-            View::setProperty(name, value);
+                        juce::Colour::fromString(props["highlight-background-color"].toString()));
         }
 
         void resized() override {
