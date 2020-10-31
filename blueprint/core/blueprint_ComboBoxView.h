@@ -29,11 +29,10 @@ namespace blueprint {
         void setProperty(const juce::Identifier &name, const juce::var &value) override {
             View::setProperty(name, value);
 
-            if (name == juce::StringRef("options"))
-            {
+            if (name == juce::StringRef("options")) {
                 // add options to comboBox menu
                 auto options = value.getArray();
-                for(auto& option : *options) {
+                for (auto &option : *options) {
                     auto valueProp = option.getDynamicObject()->getProperty("value");
                     auto labelProp = option.getDynamicObject()->getProperty("label");
                     addOption(static_cast<int>(valueProp), labelProp.toString());
@@ -41,16 +40,14 @@ namespace blueprint {
                 if (props.contains("initialValue"))
                     comboBox.setSelectedId(static_cast<int>(props["initialValue"]));
             }
-            if (name == juce::StringRef("onValueChange") && value.isMethod())
-            {
+            if (name == juce::StringRef("onValueChange") && value.isMethod()) {
                 comboBox.onChange = [&] {
                     std::vector<juce::var> jsArgs{{comboBox.getSelectedId()}};
                     juce::var::NativeFunctionArgs nfArgs(juce::var(), jsArgs.data(), static_cast<int>(jsArgs.size()));
                     std::invoke(props["onValueChange"].getNativeFunction(), nfArgs);
                 };
             }
-            if (name == juce::StringRef("initialValue"))
-            {
+            if (name == juce::StringRef("initialValue")) {
                 comboBox.setSelectedId(static_cast<int>(value));
             }
         }
@@ -104,7 +101,7 @@ namespace blueprint {
                         juce::Colour::fromString(props["highlight-background-color"].toString()));
         }
 
-        void addOption(const int id, const juce::String& label ) {
+        void addOption(const int id, const juce::String &label) {
             // skip addItem() if comboBox already has the same id
             for (int idx = 0; idx < comboBox.getNumItems(); idx++) {
                 if (id == comboBox.getItemId(idx)) return;
