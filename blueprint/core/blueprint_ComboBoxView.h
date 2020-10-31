@@ -35,6 +35,7 @@ namespace blueprint
 
         void setProperty(const juce::Identifier &name, const juce::var &value) override
         {
+            // TODO: Paintメソッドに移した方が良さそう。Hot-reload時にクラッシュする
             if (name == juce::StringRef("background-color"))
                 comboBox.setColour(
                         juce::ComboBox::ColourIds::backgroundColourId,
