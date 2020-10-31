@@ -30,6 +30,7 @@ namespace blueprint
             comboBox.addItem("Bold",   2);
             comboBox.addItem("Italic", 3);
             comboBox.setSelectedId(1);
+            comboBox.setLookAndFeel(&lookAndFeel);
         }
 
         void setProperty(const juce::Identifier &name, const juce::var &value) override
@@ -64,6 +65,25 @@ namespace blueprint
                         juce::ComboBox::ColourIds::outlineColourId,
                         juce::Colour::fromString(value.toString())
                 );
+            if (name == juce::StringRef("popup-color"))
+            {
+                lookAndFeel.setColour(
+                        juce::PopupMenu::ColourIds::backgroundColourId,
+                        juce::Colour::fromString(value.toString()));
+            }
+            if (name == juce::StringRef("highlight-color"))
+            {
+                lookAndFeel.setColour(
+                        juce::PopupMenu::ColourIds::highlightedBackgroundColourId,
+                        juce::Colour::fromString(value.toString()));
+            }
+            if (name == juce::StringRef("highlight-background-color"))
+            {
+                lookAndFeel.setColour(
+                        juce::PopupMenu::ColourIds::highlightedTextColourId,
+                        juce::Colour::fromString(value.toString()));
+            }
+
             View::setProperty(name, value);
         }
 
@@ -75,7 +95,7 @@ namespace blueprint
     private:
         //==============================================================================
         juce::ComboBox comboBox;
-
+        juce::LookAndFeel_V4 lookAndFeel;
         //==============================================================================
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ComboBoxView)
     };

@@ -53,6 +53,9 @@ class App extends Component {
               outline-color="00000000"
               focused-outline-color="ffffffff"
               button-color="ffff0000"
+              popup-color="88000000"
+              highlight-color="ff00ff55"
+              highlight-background-color="ff673938"
           />
         </View>
       </View>
