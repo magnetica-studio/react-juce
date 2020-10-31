@@ -56,6 +56,7 @@ class App extends Component {
               popup-color="88000000"
               highlight-color="ff00ff55"
               highlight-background-color="ff673938"
+              onValueChange={console.log}
           />
         </View>
       </View>

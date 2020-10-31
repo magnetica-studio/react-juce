@@ -30,10 +30,23 @@ namespace blueprint {
             comboBox.setLookAndFeel(&lookAndFeel);
         }
 
-        void paint(juce::Graphics &g) override
-        {
+//        void setProperty(const juce::Identifier &name, const juce::var &value) override {
+//        }
+
+        void paint(juce::Graphics &g) override {
             View::paint(g);
 
+            if (props.contains("onValueChange") && props["onValueChange"].isMethod()) {
+                comboBox.onChange = [&] {
+                    auto selectedId = comboBox.getSelectedId();
+                    auto nativeFunction = props["onValueChange"].getNativeFunction();
+                    jassert(selectedId);
+                    std::vector<juce::var> jsArgs{{selectedId}};
+                    juce::var::NativeFunctionArgs nfArgs(juce::var(), jsArgs.data(), static_cast<int>(jsArgs.size()));
+                    std::invoke(nativeFunction, nfArgs);
+                };
+
+            }
             if (props.contains("background-color"))
                 comboBox.setColour(
                         juce::ComboBox::ColourIds::backgroundColourId,
