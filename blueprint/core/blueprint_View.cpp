@@ -207,10 +207,14 @@ namespace blueprint
     {
         auto w = cachedFloatBounds.getWidth();
         auto h = cachedFloatBounds.getHeight();
+        auto x = cachedFloatBounds.getTopLeft().getX();
+        auto y = cachedFloatBounds.getTopLeft().getY();
 
         dispatchViewEvent("onMeasure", detail::makeViewEventObject({
             {"width", w},
-            {"height", h}
+            {"height", h},
+            {"x", x},
+            {"y", y}
         }));
     }
 
