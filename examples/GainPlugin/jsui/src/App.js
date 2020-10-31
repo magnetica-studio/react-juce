@@ -22,6 +22,9 @@ function animatedDraw(ctx) {
   ctx.fillStyle = `ff${hex}ffaa`;
   ctx.fillRect(0, 0, width, 2);
 }
+function ComboBox(props) {
+  return React.createElement('ComboBoxView', props, props.children);
+}
 
 class App extends Component {
   render() {
@@ -41,6 +44,7 @@ class App extends Component {
           </Slider>
           <Meter {...styles.meter} />
           <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
+          <ComboBox width="100%" height={20} background-color={`770055ff`}/>
         </View>
       </View>
     );
