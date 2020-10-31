@@ -22,7 +22,7 @@ function animatedDraw(ctx) {
   ctx.fillStyle = `ff${hex}ffaa`;
   ctx.fillRect(0, 0, width, 2);
 }
-function ComboBox(props) {
+function Picker(props) {
   return React.createElement('ComboBoxView', props, props.children);
 }
 
@@ -51,7 +51,7 @@ class App extends Component {
           </Slider>
           <Meter {...styles.meter} />
           <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
-          <ComboBox
+          <Picker
               width="100%"
               height={20}
               arrow-color="00ffffff"
