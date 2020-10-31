@@ -23,10 +23,6 @@ namespace blueprint {
         ComboBoxView()
                 : View() {
             addAndMakeVisible(comboBox, 1);
-            comboBox.addItem("Plain", 1);
-            comboBox.addItem("Bold", 2);
-            comboBox.addItem("Italic", 3);
-            comboBox.setSelectedId(1);
             comboBox.setLookAndFeel(&lookAndFeel);
         }
 
@@ -35,17 +31,23 @@ namespace blueprint {
 
         void paint(juce::Graphics &g) override {
             View::paint(g);
+            if (props.contains("options")) {
+                // addOption to comboBox
+                auto options = props["options"].getArray();
+                for(auto& option : *options) {
+                    auto value = option.getDynamicObject()->getProperty("value");
+                    auto label = option.getDynamicObject()->getProperty("label");
+                    auto id = static_cast<int>(value);
+                    addOption(id, label.toString());
+                }
+            }
 
             if (props.contains("onValueChange") && props["onValueChange"].isMethod()) {
                 comboBox.onChange = [&] {
-                    auto selectedId = comboBox.getSelectedId();
-                    auto nativeFunction = props["onValueChange"].getNativeFunction();
-                    jassert(selectedId);
-                    std::vector<juce::var> jsArgs{{selectedId}};
+                    std::vector<juce::var> jsArgs{{comboBox.getSelectedId()}};
                     juce::var::NativeFunctionArgs nfArgs(juce::var(), jsArgs.data(), static_cast<int>(jsArgs.size()));
-                    std::invoke(nativeFunction, nfArgs);
+                    std::invoke(props["onValueChange"].getNativeFunction(), nfArgs);
                 };
-
             }
             if (props.contains("background-color"))
                 comboBox.setColour(
@@ -91,6 +93,14 @@ namespace blueprint {
                 lookAndFeel.setColour(
                         juce::PopupMenu::ColourIds::highlightedTextColourId,
                         juce::Colour::fromString(props["highlight-background-color"].toString()));
+        }
+
+        void addOption(const int id, const juce::String& label ) {
+            // skip addItem() if comboBox already has the same id
+            for (int idx = 0; idx < comboBox.getNumItems(); idx++) {
+                if (id == comboBox.getItemId(idx)) return;
+            }
+            comboBox.addItem(label, id);
         }
 
         void resized() override {

@@ -35,6 +35,13 @@ class App extends Component {
     //   </View>
     // );
 
+    // juceのComboBoxはoptionのvalueはint
+    const options = [
+      { value: 5, label: 'Chocolate' },
+      { value: 2, label: 'Strawberry' },
+      { value: 3, label: 'Vanilla' }
+    ]
+
     return (
       <View {...styles.container}>
         <View {...styles.content}>
@@ -56,6 +63,7 @@ class App extends Component {
               popup-color="88000000"
               highlight-color="ff00ff55"
               highlight-background-color="ff673938"
+              options={options}
               onValueChange={console.log}
           />
         </View>
