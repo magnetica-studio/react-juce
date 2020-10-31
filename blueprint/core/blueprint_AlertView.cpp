@@ -18,12 +18,16 @@ namespace blueprint
                 AlertWindow::AlertIconType::NoIcon
                 )
     {
-//        juce::AlertWindow::centreWithSize (300, 200);
         juce::AlertWindow::setVisible (true);
-
+        juce::AlertWindow::setColour(ColourIds::backgroundColourId, juce::Colour::fromString("ff000000"));
     }
-    void AlertView::mouseDown(const juce::MouseEvent &e) {
+    void AlertView::mouseDown(const juce::MouseEvent &e)
+    {
         DBG("mouseDown");
         juce::AlertWindow::mouseDown(e);
+    }
+    void AlertView::addChild (View* childView, int /*index*/)
+    {
+        addCustomComponent(childView);
     }
 }

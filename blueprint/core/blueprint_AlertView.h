@@ -34,6 +34,7 @@ namespace blueprint
         //==============================================================================
         AlertView();
         ~AlertView() override = default;
+        void addChild (View* childView, int index) override;
 
     protected:
         void mouseDown(const juce::MouseEvent &e) override;

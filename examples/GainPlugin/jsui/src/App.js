@@ -44,7 +44,11 @@ class App extends Component {
           <Meter {...styles.meter} />
           <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
         </View>
-        <AlertView/>
+        <AlertView width={0} height={0}>
+          <Slider paramId="MainGain" {...styles.knob}>
+            <Label paramId="MainGain" {...styles.label} />
+          </Slider>
+        </AlertView>
       </View>
     );
   }
