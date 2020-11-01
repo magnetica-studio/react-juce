@@ -7,7 +7,7 @@ import {
   Canvas,
   Image,
   View,
-  Text,
+  Picker,
 } from 'juce-blueprint';
 
 
@@ -21,9 +21,6 @@ function animatedDraw(ctx) {
   // #ffffaa to juce's Colour::fromString() API which is ffffffaa.
   ctx.fillStyle = `ff${hex}ffaa`;
   ctx.fillRect(0, 0, width, 2);
-}
-function Picker(props) {
-  return React.createElement('ComboBoxView', props, props.children);
 }
 
 class App extends Component {
