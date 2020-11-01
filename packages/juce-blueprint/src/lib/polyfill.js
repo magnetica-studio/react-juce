@@ -18,6 +18,7 @@ class EventLoop {
       eventTime: performance.now() + time,
       vargs: [a, b, c, d, e, f],
     };
+    return id;
   }
 
   clearTimeout(id) {
