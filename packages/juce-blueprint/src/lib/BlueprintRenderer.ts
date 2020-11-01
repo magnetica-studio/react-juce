@@ -1,5 +1,6 @@
 import MethodTracer from './MethodTracer';
-import ReactReconciler from 'react-reconciler';
+import ReactReconciler, { DevToolsConfig } from 'react-reconciler';
+
 import BlueprintBackend, {ViewInstance, RawTextViewInstance} from './BlueprintBackend';
 
 import invariant from 'invariant';
@@ -204,7 +205,15 @@ const HostConfig = {
 
 };
 
+export const BlueprintTracedRenderer = ReactReconciler(new Proxy(HostConfig, MethodTracer));
 //TODO: Applied ts-ignore here as TS complains about missing functions on HostConfig
 //@ts-ignore
-export default ReactReconciler(HostConfig);
-export const BlueprintTracedRenderer = ReactReconciler(new Proxy(HostConfig, MethodTracer));
+const reconciler = ReactReconciler(HostConfig);
+const devtoolsConfig: DevToolsConfig<any, any> = {
+    bundleType: 0,
+  version: "16.13.1",
+  rendererPackageName: "juce-blueprint",
+}
+reconciler.injectIntoDevTools(devtoolsConfig);
+export default reconciler;
+
