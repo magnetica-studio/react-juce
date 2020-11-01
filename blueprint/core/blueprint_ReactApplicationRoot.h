@@ -14,6 +14,7 @@
 #include "blueprint_CanvasView.h"
 #include "blueprint_EcmascriptEngine.h"
 #include "blueprint_ImageView.h"
+#include "blueprint_ComboBoxView.h"
 #include "blueprint_RawTextView.h"
 #include "blueprint_ScrollView.h"
 #include "blueprint_ScrollViewContentShadowView.h"
@@ -458,6 +459,13 @@ namespace blueprint
                 return {std::move(view), std::move(shadowView)};
             });
 
+            viewManager->registerViewType("ComboBoxView", []() -> ViewPair {
+                auto view = std::make_unique<ComboBoxView>();
+
+                auto shadowView = std::make_unique<ShadowView>(view.get());
+
+                return {std::move(view), std::move(shadowView)};
+            });
             viewManager->registerViewType("Image", []() -> ViewPair {
                 auto view = std::make_unique<ImageView>();
 

@@ -22,6 +22,9 @@ function animatedDraw(ctx) {
   ctx.fillStyle = `ff${hex}ffaa`;
   ctx.fillRect(0, 0, width, 2);
 }
+function Picker(props) {
+  return React.createElement('ComboBoxView', props, props.children);
+}
 
 class App extends Component {
   render() {
@@ -32,6 +35,13 @@ class App extends Component {
     //   </View>
     // );
 
+    // juceのComboBoxはoptionのvalueはint. 連番でなくてもいい
+    const options = [
+      { value: 5, label: 'Chocolate' },
+      { value: 2, label: 'Strawberry' },
+      { value: 3, label: 'Vanilla' }
+    ]
+
     return (
       <View {...styles.container}>
         <View {...styles.content}>
@@ -41,6 +51,22 @@ class App extends Component {
           </Slider>
           <Meter {...styles.meter} />
           <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
+          <Picker
+              width="100%"
+              height={20}
+              arrow-color="00ffffff"
+              background-color={`00000000`}
+              color={`ffffffff`}
+              outline-color="00000000"
+              focused-outline-color="ffffffff"
+              button-color="ffff0000"
+              popup-color="88000000"
+              highlight-color="ff00ff55"
+              highlight-background-color="ff673938"
+              options={options}
+              onValueChange={console.log}
+              initialValue={5}
+          />
         </View>
       </View>
     );
