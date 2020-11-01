@@ -52,6 +52,12 @@ namespace blueprint {
             }
         }
 
+        void addOption(const int id, const juce::String &label) {
+            // skip comboBox.addItem() if it already has the same id
+            if (comboBox.indexOfItemId(id) != -1) return;
+            comboBox.addItem(label, id);
+        }
+
         void paint(juce::Graphics &g) override {
             View::paint(g);
 
@@ -99,14 +105,6 @@ namespace blueprint {
                 lookAndFeel.setColour(
                         juce::PopupMenu::ColourIds::highlightedTextColourId,
                         juce::Colour::fromString(props["highlight-background-color"].toString()));
-        }
-
-        void addOption(const int id, const juce::String &label) {
-            // skip addItem() if comboBox already has the same id
-            for (int idx = 0; idx < comboBox.getNumItems(); idx++) {
-                if (id == comboBox.getItemId(idx)) return;
-            }
-            comboBox.addItem(label, id);
         }
 
         void resized() override {
