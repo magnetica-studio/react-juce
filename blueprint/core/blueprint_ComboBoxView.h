@@ -114,8 +114,8 @@ namespace blueprint {
 
     private:
         //==============================================================================
-        juce::ComboBox comboBox;
         juce::LookAndFeel_V4 lookAndFeel;
+        juce::ComboBox comboBox;
         //==============================================================================
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ComboBoxView)
     };
