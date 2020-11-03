@@ -26,33 +26,17 @@ namespace blueprint {
             comboBox.setLookAndFeel(&lookAndFeel);
         }
 
-        void setProperty(const juce::Identifier &name, const juce::var &value) override {
-            View::setProperty(name, value);
+        void addOptions(const juce::Array<juce::var> &options) {
+            for (int idx = 0; idx < options.size(); idx++) {
+                const auto &option = options.getReference(idx);
+                int id = option.getDynamicObject()->getProperty("value");
+                juce::String label = option.getDynamicObject()->getProperty("label");
+                addItemToComboBox(label, id);
+            }
 
-            if (name == juce::StringRef("options")) {
-                // add options to comboBox menu
-                auto options = value.getArray();
-                for (auto &option : *options) {
-                    auto valueProp = option.getDynamicObject()->getProperty("value");
-                    auto labelProp = option.getDynamicObject()->getProperty("label");
-                    addOption(static_cast<int>(valueProp), labelProp.toString());
-                }
-                if (props.contains("initialValue"))
-                    comboBox.setSelectedId(static_cast<int>(props["initialValue"]));
-            }
-            if (name == juce::StringRef("onValueChange") && value.isMethod()) {
-                comboBox.onChange = [&] {
-                    std::vector<juce::var> jsArgs{{comboBox.getSelectedId()}};
-                    juce::var::NativeFunctionArgs nfArgs(juce::var(), jsArgs.data(), static_cast<int>(jsArgs.size()));
-                    std::invoke(props["onValueChange"].getNativeFunction(), nfArgs);
-                };
-            }
-            if (name == juce::StringRef("initialValue")) {
-                comboBox.setSelectedId(static_cast<int>(value));
-            }
         }
 
-        void addOption(const int id, const juce::String &label) {
+        void addItemToComboBox(const juce::String &label, int id) {
             // skip comboBox.addItem() if it already has the same id
             if (comboBox.indexOfItemId(id) != -1) return;
             comboBox.addItem(label, id);
@@ -61,6 +45,19 @@ namespace blueprint {
         void paint(juce::Graphics &g) override {
             View::paint(g);
 
+            if (props.contains("options")) {
+                addOptions(*(props["options"].getArray()));
+            }
+            if (props.contains("onChange") && props["onChange"].isMethod()) {
+                comboBox.onChange = [&] {
+                    std::vector<juce::var> jsArgs{{comboBox.getSelectedId()}};
+                    juce::var::NativeFunctionArgs nfArgs(juce::var(), jsArgs.data(), static_cast<int>(jsArgs.size()));
+                    std::invoke(props["onChange"].getNativeFunction(), nfArgs);
+                };
+            }
+            if (props.contains("value")) {
+                comboBox.setSelectedId(static_cast<int>(props["value"]));
+            }
             if (props.contains("background-color"))
                 comboBox.setColour(
                         juce::ComboBox::ColourIds::backgroundColourId,
