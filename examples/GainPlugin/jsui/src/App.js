@@ -34,9 +34,9 @@ class App extends Component {
 
     // juceのComboBoxはoptionのvalueはint. 連番でなくてもいい
     const options = [
-      { value: 5, label: 'Chocolate' },
-      { value: 2, label: 'Strawberry' },
-      { value: 3, label: 'Vanilla' }
+      { label: 'strawberry', value: 1 },
+      { label: 'chocolate', value: 2 },
+      { label: 'banana', value: 3 }
     ]
 
     return (
@@ -61,8 +61,8 @@ class App extends Component {
               highlight-color="ff00ff55"
               highlight-background-color="ff673938"
               options={options}
-              onValueChange={console.log}
-              initialValue={5}
+              onChange={console.log}
+              no-arrow
           />
         </View>
       </View>
