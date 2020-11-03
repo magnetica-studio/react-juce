@@ -13,17 +13,33 @@
 
 namespace blueprint {
 
+    class LookAndFeel_NoArrow : public juce::LookAndFeel_V4 {
+    public:
+        void
+        drawComboBox(juce::Graphics &g, int width, int height, bool /*isButtonDown*/, int /*buttonX*/, int /*buttonY*/,
+                     int /*buttonW*/,
+                     int /*buttonH*/, juce::ComboBox &box) override {
+            auto cornerSize = box.findParentComponentOfClass<juce::ChoicePropertyComponent>() != nullptr ? 0.0f : 3.0f;
+            juce::Rectangle<int> boxBounds(0, 0, width, height);
+
+            g.setColour(box.findColour(juce::ComboBox::backgroundColourId));
+            g.fillRoundedRectangle(boxBounds.toFloat(), cornerSize);
+
+            g.setColour(box.findColour(juce::ComboBox::outlineColourId));
+            g.drawRoundedRectangle(boxBounds.toFloat().reduced(0.5f, 0.5f), cornerSize, 1.0f);
+        }
+
+
+    };
+
     //==============================================================================
-    /** The ImageView class is a core view for drawing images within Blueprint's
-        layout system.
-     */
     class ComboBoxView : public View {
     public:
         //==============================================================================
         ComboBoxView()
                 : View() {
             addAndMakeVisible(comboBox, 1);
-            comboBox.setLookAndFeel(&lookAndFeel);
+            comboBox.setLookAndFeel(&lookAndFeelV4);
         }
 
         void addOptions(const juce::Array<juce::var> &options) {
@@ -89,19 +105,21 @@ namespace blueprint {
                         juce::Colour::fromString(props["outline-color"].toString())
                 );
             if (props.contains("popup-color"))
-                lookAndFeel.setColour(
+                setColorOfLookAndFeel(
                         juce::PopupMenu::ColourIds::backgroundColourId,
                         juce::Colour::fromString(props["popup-color"].toString()));
 
             if (props.contains("highlight-color"))
-                lookAndFeel.setColour(
+                setColorOfLookAndFeel(
                         juce::PopupMenu::ColourIds::highlightedBackgroundColourId,
                         juce::Colour::fromString(props["highlight-color"].toString()));
 
             if (props.contains("highlight-background-color"))
-                lookAndFeel.setColour(
+                setColorOfLookAndFeel(
                         juce::PopupMenu::ColourIds::highlightedTextColourId,
                         juce::Colour::fromString(props["highlight-background-color"].toString()));
+            if (props.contains("no-arrow"))
+                comboBox.setLookAndFeel(&lookAndFeelNoArrow);
         }
 
         void resized() override {
@@ -109,12 +127,20 @@ namespace blueprint {
             View::resized();
         }
 
+        void setColorOfLookAndFeel(int colorId, juce::Colour color)
+        {
+            lookAndFeelNoArrow.setColour(colorId, color);
+            lookAndFeelV4.setColour(colorId, color);
+        }
+
     private:
         //==============================================================================
-        juce::LookAndFeel_V4 lookAndFeel;
+        juce::LookAndFeel_V4 lookAndFeelV4;
+        LookAndFeel_NoArrow lookAndFeelNoArrow;
         juce::ComboBox comboBox;
         //==============================================================================
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ComboBoxView)
     };
 
 }
+
