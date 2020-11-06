@@ -372,6 +372,8 @@ namespace blueprint
          **/
         BundleEvalCallback afterBundleEval;
 
+        std::function<void()> beforeReset;
+
         //==============================================================================
         void handleRuntimeError(const EcmascriptEngine::Error& err)
         {
@@ -416,7 +418,8 @@ namespace blueprint
         void handleBundleChanged(const juce::File& bundle)
         {
             JUCE_ASSERT_MESSAGE_THREAD
-
+          if (beforeReset)
+              beforeReset();
             engine.reset();
             initViewManager();
             evaluate(bundle);
