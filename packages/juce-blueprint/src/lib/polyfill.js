@@ -66,8 +66,18 @@ function __setInterval__ (cb, wait, c, d, e, f, g) {
   }, wait);
 }
 
+function __clearTimeout__(id) {
+  el.clearTimeout(id);
+}
 
 /** Attach our polyfills */
-global.__schedulerInterrupt__ = __schedulerInterrupt__;
 global.setTimeout = __setTimeout__;
 global.setInterval = __setInterval__;
+global.clearTimeout = __clearTimeout__;
+
+global.__schedulerInterrupt__ = __schedulerInterrupt__;
+
+/* stub for devtools */
+global.__onSocketMessage__ = () => {};
+global.__onSocketOpen__ = () => {};
+global.__onSocketClose__ = () => {};

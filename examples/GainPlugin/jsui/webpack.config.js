@@ -1,3 +1,5 @@
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const ReplacePlugin = require('./replace-plugin');
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -8,11 +10,15 @@ module.exports = {
     `webpack:///${info.absoluteResourcePath.replace(/\\/g, '/')}`
   },
   devtool: "source-map",
+  plugins: [
+    //new BundleAnalyzerPlugin()
+    new ReplacePlugin()
+  ],
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        exclude: /node_modules\/(?!react-devtools-core)/,
         use: ['babel-loader']
       },
       {

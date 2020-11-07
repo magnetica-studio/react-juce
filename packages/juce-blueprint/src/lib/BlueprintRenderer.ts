@@ -210,7 +210,7 @@ export const BlueprintTracedRenderer = ReactReconciler(new Proxy(HostConfig, Met
 //@ts-ignore
 const reconciler = ReactReconciler(HostConfig);
 const devtoolsConfig: DevToolsConfig<any, any> = {
-    bundleType: 0,
+  bundleType: 0,
   version: "16.13.1",
   rendererPackageName: "juce-blueprint",
 }

@@ -252,8 +252,6 @@ namespace blueprint
     void EcmascriptEngine::timerCallback()
     {
         duk_debugger_cooperate(dukContext.get());
-        duk_eval_string_noresult(dukContext.get(), "__schedulerInterrupt__()");
-
     }
 
     //==============================================================================

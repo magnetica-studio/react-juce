@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Blueprint Developer Tools</title>
+    <meta charset="utf8"/>
+  </head>
+  <body>
+    <div id="container" style="width:100vw; height:100vh;">
+      <h1>waiting connection from juce-blueprint...</h1>
+    </div>
+  </body>
+  <script>
+    const devtools = require('react-devtools-core/standalone').default;
+    const net = require("net");
+    window.devtools = devtools;
+    devtools.setContentDOMNode(document.getElementById("container"));
+
+    // check first 4 bytes. the value is the default of juce::InterprocessConnection
+    const MAGIC_NUMBER = 0xf2b49e2c;
+    const MAGIC = new Buffer(4);
+    MAGIC.writeUInt32LE(MAGIC_NUMBER);
+
+    const header = new Buffer(9);
+    header.writeUInt32LE(MAGIC_NUMBER);
+    header.writeUInt32LE(0x1, 4);
+
+    let pendingMessages = [];
+
+    const server = net.createServer(c => {
+      if (window.conn) {
+        console.log("already connected");
+        c.destroy();
+        return;
+      }
+      window.conn = c;
+      window.ws = ws = {
+        send: (data) => {
+          const str = data;
+          header.writeUInt32LE(str.length + 1, 4);
+          const packet = Buffer.concat([header, Buffer.from(str)]);
+          window.packet= packet;
+          c.write(packet);
+        },
+        close: () => {
+          c.destroy();
+          window.conn = null;
+        },
+      };
+
+      let devtoolsInterface = devtools.connectToSocket(ws);
+      pendingMessages.forEach(ws.onmessage);
+
+      c.on("data", (buf) => {
+        let index = buf.indexOf(MAGIC);
+        const messages = [];
+        while (index == 0) {
+          buf = buf.subarray(4);
+          const payloadLength = buf.readUInt32LE();
+          const payloadStr = buf.subarray(4, 4 + payloadLength).toString("UTF8");
+          messages.push(JSON.parse(payloadStr));
+          buf = buf.subarray(4 + payloadLength);
+          index = buf.indexOf(MAGIC);
+        }
+        messages.forEach(message => {
+          if (ws.hasOwnProperty("onmessage")) {
+            try {
+              ws.onmessage({data: JSON.stringify(message)});
+            } catch(e) {
+              if (message.event === "operations") {
+                devtoolsInterface.close();
+                devtoolsInterface = devtools.connectToSocket(ws);
+                pendingMessages = [];      
+                ws.onmessage({data: JSON.stringify(message)});
+              }
+            }
+          } else {
+            pendingMessages.push({data: JSON.stringify(message)});
+          }
+        });
+      });
+      c.on("end", () => {
+        console.log("backend detached");
+        ws.onmessage({data: JSON.stringify({event: "shutdown"})});
+        ws.send = () => {};
+        c.destroy();
+        conn = null;
+      });
+      c.on("error", (e) => console.error(e));
+      console.log("connected");
+    });
+    server.on("error", console.error);
+    server.listen(8124, () => console.log("listen on port 8124"));
+  </script>
+</html>
