@@ -221,6 +221,24 @@ namespace blueprint
             if (!c.isTransparent())
                 g.fillAll(c);
         }
+#ifndef BLUEPRINT_SHOW_DEBUGBORDER
+    #define BLUEPRINT_SHOW_DEBUGBORDER 1
+#endif
+        if constexpr(JUCE_DEBUG && BLUEPRINT_SHOW_DEBUGBORDER)
+        {
+            juce::Path border;
+            float borderWidth =1.0;
+            auto c = juce::Colours::green;
+                    auto borderBounds = getLocalBounds().toFloat().reduced(borderWidth * 0.5f);
+            auto width = borderBounds.getWidth();
+            auto height = borderBounds.getHeight();
+            auto minLength = std::min(width, height);
+
+            border.addRoundedRectangle(borderBounds, 0);
+            g.setColour(c);
+            g.strokePath(border, juce::PathStrokeType(borderWidth));
+            g.reduceClipRegion(border);
+        }
     }
 
     //==============================================================================
