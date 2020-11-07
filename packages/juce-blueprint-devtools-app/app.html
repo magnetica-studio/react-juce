@@ -83,6 +83,7 @@
         ws.onmessage({data: JSON.stringify({event: "shutdown"})});
         ws.send = () => {};
         c.destroy();
+        devtoolsInterface.close();
         conn = null;
       });
       c.on("error", (e) => console.error(e));
