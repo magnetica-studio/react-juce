@@ -1,5 +1,4 @@
-//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const ReplacePlugin = require('./replace-plugin');
+const BlueprintDevtoolsPlugin = require('juce-blueprint-devtools/plugin');
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -11,8 +10,7 @@ module.exports = {
   },
   devtool: "source-map",
   plugins: [
-    //new BundleAnalyzerPlugin()
-    new ReplacePlugin()
+    new BlueprintDevtoolsPlugin()
   ],
   module: {
     rules: [
