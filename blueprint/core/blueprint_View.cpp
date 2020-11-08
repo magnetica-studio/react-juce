@@ -222,9 +222,13 @@ namespace blueprint
                 g.fillAll(c);
         }
 #ifndef BLUEPRINT_SHOW_DEBUGBORDER
-    #define BLUEPRINT_SHOW_DEBUGBORDER 1
+    #ifdef JUCE_DEBUG
+        #define BLUEPRINT_SHOW_DEBUGBORDER 1
+    #else
+        #define BLUEPRINT_SHOW_DEBUGBORDER 0
+    #endif
 #endif
-        if constexpr(JUCE_DEBUG && BLUEPRINT_SHOW_DEBUGBORDER)
+        if constexpr(BLUEPRINT_SHOW_DEBUGBORDER)
         {
             juce::Path border;
             float borderWidth =1.0;
