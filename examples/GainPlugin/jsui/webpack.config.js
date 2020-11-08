@@ -1,3 +1,4 @@
+const BlueprintDevtoolsPlugin = require('juce-blueprint-devtools/plugin');
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -8,11 +9,14 @@ module.exports = {
     `webpack:///${info.absoluteResourcePath.replace(/\\/g, '/')}`
   },
   devtool: "source-map",
+  plugins: [
+    new BlueprintDevtoolsPlugin()
+  ],
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        exclude: /node_modules\/(?!react-devtools-core)/,
         use: ['babel-loader']
       },
       {
@@ -21,7 +25,7 @@ module.exports = {
         use: ['svg-inline-loader']
       },
       {
-        test: /\.png$/,
+        test: /\.(png|jpeg|jpg|gif)$/,
         use: [
           {
             loader: 'url-loader',

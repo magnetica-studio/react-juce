@@ -120,6 +120,10 @@ namespace blueprint
         This can be useful to hide error details from users in production etc.
      */
     class ReactApplicationRoot : public View
+            , private juce::Timer
+#if JUCE_DEBUG
+            , private juce::InterprocessConnection
+#endif
     {
     public:
         //==============================================================================
@@ -137,6 +141,7 @@ namespace blueprint
             setWantsKeyboardFocus(true);
 #endif
         }
+
 
         //==============================================================================
         /** Override the default View behavior.  */
@@ -203,14 +208,17 @@ namespace blueprint
                 // Register internal React.js backend rendering methods
                 registerNativeRenderingHooks();
 
-                if (beforeBundleEval)
+                if (beforeBundleEval){
                     beforeBundleEval(bundle);
+                }
+                stopTimer();
 
                 auto result = engine.evaluate(bundle);
 
-                if (afterBundleEval)
+                if (afterBundleEval) {
                     afterBundleEval(bundle);
-
+                }
+                startTimer(50);
                 return result;
             }
             catch (const EcmascriptEngine::Error& err)
@@ -570,6 +578,36 @@ namespace blueprint
                 jassert (args.numArguments == 0);
                 return juce::var(getViewId());
             });
+
+#if JUCE_DEBUG
+            engine.registerNativeMethod("__BlueprintNative__", "sendToSocket", [this](const juce::var::NativeFunctionArgs& args) {
+                jassert (args.numArguments == 1);
+                juce::String payload = args.arguments[0].toString();
+                juce::MemoryBlock mem (payload.toUTF8(), payload.getNumBytesAsUTF8());
+                if (isConnected()) {
+                    sendMessage(mem);
+                }
+                return juce::var::undefined();
+            });
+
+            engine.registerNativeMethod("__BlueprintNative__", "connect", [this](const juce::var::NativeFunctionArgs& args) {
+                jassert (args.numArguments == 0);
+                if (!isConnected()) {
+                    connectToSocket("localhost", 8124, -1);
+                } else {
+                    engine.invoke("__onSocketOpen__");
+                }
+                return juce::var::undefined();
+            });
+
+            engine.registerNativeMethod("__BlueprintNative__", "close", [this](const juce::var::NativeFunctionArgs& args) {
+                jassert (args.numArguments == 0);
+                if (isConnected()) {
+                    disconnect();
+                }
+                return juce::var::undefined();
+            });
+#endif
         }
 
         //==============================================================================
@@ -578,8 +616,29 @@ namespace blueprint
         std::unique_ptr<ViewManager>            viewManager;
         std::unique_ptr<BundleWatcher>          bundleWatcher;
         std::unique_ptr<juce::AttributedString> errorText;
+        void timerCallback() override {
+            engine.invoke("__schedulerInterrupt__");
+        }
 
+#if JUCE_DEBUG
+        void connectToDevToolsFrontend() {
+            if (!isConnected()) {
+                connectToSocket("localhost", 8124, -1);
+            }
+        }
+        void connectionMade() override {
+            engine.invoke("__onSocketOpen__");
+        }
+        void connectionLost() override {
+            engine.invoke("__onSocketClose__");
+        }
+        void messageReceived(const juce::MemoryBlock &message) override {
+            auto payload = juce::String::fromUTF8((char *)message.getData() + 1, message.getSize() - 1);
+            engine.invoke("__onSocketMessage__", payload.toRawUTF8());
+        }
+#endif
         //==============================================================================
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReactApplicationRoot)
+
     };
 }

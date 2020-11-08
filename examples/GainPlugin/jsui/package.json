@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/runtime-corejs3": "^7.11.2",
+    "@babel/polyfill": "7.12.1",
+    "@babel/runtime-corejs3": "7.12.1",
+    "core-js": "3.6.5",
     "file-loader": "6.1.0",
     "juce-blueprint": "file:../../../packages/juce-blueprint",
+    "juce-blueprint-devtools": "file:../../../packages/juce-blueprint-devtools",
     "react": "^16.13.1"
   },
   "devDependencies": {
