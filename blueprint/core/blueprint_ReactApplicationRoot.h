@@ -175,7 +175,10 @@ namespace blueprint
                engine.debuggerAttach();
            }
 #endif
-            return true;
+
+            // blueprint 側でキー入力を消費してしまわないようにするために、
+            // かならず false を返すようにしている。(yuasa)
+            return false;
         }
 
         //==============================================================================

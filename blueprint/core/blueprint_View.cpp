@@ -310,7 +310,9 @@ namespace blueprint
         if (auto* parent = findParentComponentOfClass<ReactApplicationRoot>())
             parent->keyPressed(key);
 
-        return true;
+        // blueprint 側でキー入力を消費してしまわないようにするために、
+        // かならず false を返すようにしている。(yuasa)
+        return false;
     }
 
     void View::dispatchViewEvent (const juce::String& eventType, const juce::var& e)
