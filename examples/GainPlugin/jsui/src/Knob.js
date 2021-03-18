@@ -29,8 +29,8 @@ const styles = {
   container: {
     minWidth: 100.0,
     minHeight: 100.0,
-    width: "55%",
-    height: "55%",
+    width: 110,
+    height: 110,
     marginTop: 15,
     marginBottom: 15,
     justifyContent: "center",

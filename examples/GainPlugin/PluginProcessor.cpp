@@ -191,9 +191,9 @@ AudioProcessorEditor* GainPluginAudioProcessor::createEditor()
     auto* editor = new reactjuce::GenericEditor(*this, bundle);
 
     editor->setResizable(true, true);
-    editor->setResizeLimits(400, 240, 400 * 2, 240 * 2);
+    editor->setResizeLimits(400, 240, 400 * 8, 240 * 8);
     editor->getConstrainer()->setFixedAspectRatio(400.0 / 240.0);
-    editor->setSize (400, 240);
+    editor->setSize (400 * 4, 240 *4);
 
     // Start timer to dispatch gainPeakValues event to update Meter values
     startTimer(100);

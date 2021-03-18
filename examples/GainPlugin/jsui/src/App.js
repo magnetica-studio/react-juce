@@ -71,6 +71,55 @@ class App extends Component {
             {...styles.logo}
           />
           <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
+          <Knob paramId="MainGain" />
           <Meter {...styles.meter} />
           <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
           <ParameterToggleButton
@@ -100,12 +149,15 @@ const styles = {
   },
   content: {
     flex: 1.0,
-    flexDirection: "column",
+    // flexDirection: "column",
     justifyContent: "space-around",
     alignItems: "center",
-    padding: 24.0,
-    maxWidth: 600,
-    aspectRatio: 400.0 / 240.0,
+    width: "100%",
+    height: "100%",
+    flexWrap: "wrap",
+    // padding: 24.0,
+    // maxWidth: 600,
+    // aspectRatio: 400.0 / 240.0,
   },
   logo: {
     flex: 0.0,
